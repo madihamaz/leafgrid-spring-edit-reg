@@ -58,7 +58,7 @@ const WorkshopsSection = () => {
             Five Ways to <span className="italic text-gradient-leaf">Create</span>
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Choose any two that call to you. All beginner-friendly, all materials included.
+            Pick as many as you love. All beginner-friendly, all materials included.
           </p>
         </motion.div>
 

@@ -6,6 +6,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { workshops } from "@/components/WorkshopsSection";
 import { useToast } from "@/hooks/use-toast";
+import { calculateTotal, getPriceBreakdown } from "@/lib/pricing";
+import { initiatePayment } from "@/lib/razorpay";
+
+const RAZORPAY_KEY_ID = "REPLACE_WITH_YOUR_KEY"; // TODO: Replace with your Razorpay Key ID
 
 const steps = [
   { label: "Your Details", icon: User },
@@ -19,25 +23,29 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
+  const [paying, setPaying] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const toggleWorkshop = (id: string) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : prev.length < 2 ? [...prev, id] : prev
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
     );
   };
 
+  const total = calculateTotal(selected.length);
+  const { items: priceItems } = getPriceBreakdown(selected.length);
+
   const canProceed = () => {
     if (step === 0) return name.trim() && email.trim() && phone.trim();
-    if (step === 1) return selected.length === 2;
+    if (step === 1) return selected.length >= 1;
     return true;
   };
 
   const handleNext = () => {
     if (!canProceed()) {
       toast({
-        title: step === 1 ? "Please select exactly 2 workshops" : "Please fill all fields",
+        title: step === 1 ? "Please select at least 1 workshop" : "Please fill all fields",
         variant: "destructive",
       });
       return;
@@ -45,16 +53,42 @@ const Register = () => {
     if (step < 2) setStep(step + 1);
   };
 
-  const handlePayment = () => {
-    // Razorpay integration placeholder — for now simulate success
-    toast({ title: "Payment simulation", description: "Razorpay integration coming soon!" });
-    navigate("/confirmation", {
-      state: {
+  const handlePayment = async () => {
+    if (RAZORPAY_KEY_ID === "REPLACE_WITH_YOUR_KEY") {
+      toast({ title: "Razorpay Key ID not configured", description: "Please add your Razorpay Key ID to complete payment integration.", variant: "destructive" });
+      return;
+    }
+
+    setPaying(true);
+    try {
+      await initiatePayment({
+        amount: total,
         name,
         email,
-        workshops: selected.map((id) => workshops.find((w) => w.id === id)?.name),
-      },
-    });
+        phone,
+        description: `The Spring Edit — ${selected.length} workshop${selected.length > 1 ? "s" : ""}`,
+        keyId: RAZORPAY_KEY_ID,
+        onSuccess: (response) => {
+          setPaying(false);
+          navigate("/confirmation", {
+            state: {
+              name,
+              email,
+              workshops: selected.map((id) => workshops.find((w) => w.id === id)?.name),
+              paymentId: response.razorpay_payment_id,
+              total,
+            },
+          });
+        },
+        onFailure: () => {
+          setPaying(false);
+          toast({ title: "Payment failed", description: "Please try again.", variant: "destructive" });
+        },
+      });
+    } catch {
+      setPaying(false);
+      toast({ title: "Could not load payment gateway", variant: "destructive" });
+    }
   };
 
   const selectedWorkshops = selected.map((id) => workshops.find((w) => w.id === id)!);
@@ -129,23 +163,22 @@ const Register = () => {
                 <div className="text-center mb-8">
                   <h1 className="font-display text-3xl font-bold mb-2">Choose Your Workshops</h1>
                   <p className="text-muted-foreground">
-                    Select exactly <span className="text-primary font-medium">2 workshops</span> — {selected.length}/2 selected
+                    Select workshops you'd like to attend — <span className="text-primary font-medium">{selected.length} selected</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    ₹300 per workshop · ₹350 each for 3 or more
                   </p>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {workshops.map((w) => {
                     const isSelected = selected.includes(w.id);
-                    const isDisabled = !isSelected && selected.length >= 2;
                     return (
                       <button
                         key={w.id}
                         onClick={() => toggleWorkshop(w.id)}
-                        disabled={isDisabled}
                         className={`text-left rounded-2xl overflow-hidden border transition-all duration-300 ${
                           isSelected
                             ? "border-primary glow-leaf"
-                            : isDisabled
-                            ? "border-border opacity-40 cursor-not-allowed"
                             : "border-border hover:border-glow"
                         }`}
                       >
@@ -165,6 +198,18 @@ const Register = () => {
                     );
                   })}
                 </div>
+
+                {/* Live price preview */}
+                {selected.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-6 p-4 rounded-xl bg-card border border-border text-center"
+                  >
+                    <span className="text-muted-foreground text-sm">Estimated total: </span>
+                    <span className="font-display text-xl font-bold text-primary">₹{total}</span>
+                  </motion.div>
+                )}
               </motion.div>
             )}
 
@@ -206,11 +251,24 @@ const Register = () => {
                     </div>
                   </div>
                   <hr className="border-border" />
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Total Amount</span>
-                    <span className="font-display text-2xl font-bold text-primary">₹699</span>
+                  {/* Price breakdown */}
+                  <div className="space-y-2">
+                    {priceItems.map((item) => (
+                      <div key={item.label} className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">{item.label}</span>
+                        <span className="text-foreground">₹{item.amount}</span>
+                      </div>
+                    ))}
+                    <div className="flex items-center justify-between pt-2 border-t border-border">
+                      <span className="font-medium text-foreground">Total</span>
+                      <span className="font-display text-2xl font-bold text-primary">₹{total}</span>
+                    </div>
                   </div>
                 </div>
+
+                <p className="text-xs text-muted-foreground text-center mt-4">
+                  Additional workshops can be booked on the spot (₹300 each, subject to availability)
+                </p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -239,9 +297,10 @@ const Register = () => {
             ) : (
               <button
                 onClick={handlePayment}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity animate-pulse-glow"
+                disabled={paying}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity animate-pulse-glow disabled:opacity-50"
               >
-                Pay ₹699 <ArrowRight className="w-4 h-4" />
+                {paying ? "Processing…" : `Pay ₹${total}`} <ArrowRight className="w-4 h-4" />
               </button>
             )}
           </div>
