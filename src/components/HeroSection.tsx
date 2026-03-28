@@ -68,7 +68,7 @@ const HeroSection = () => {
             to="/register"
             className="inline-block px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg hover:opacity-90 transition-all animate-pulse-glow"
           >
-            Register Now — ₹699
+            Register Now — Starting at ₹399
           </Link>
         </motion.div>
       </div>
