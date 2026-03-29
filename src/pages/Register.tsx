@@ -266,8 +266,8 @@ const Register = () => {
                   </div>
                 </div>
 
-                <p className="text-xs text-muted-foreground text-center mt-4">
-                  Additional workshops can be booked on the spot (₹300 each, subject to availability)
+                <p className="text-xs text-muted-foreground text-center mt-4 italic">
+                  Note: Additional workshops can be booked on the spot at Rs.300 each, subject to availability.
                 </p>
               </motion.div>
             )}
