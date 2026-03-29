@@ -8,6 +8,7 @@ import { workshops } from "@/components/WorkshopsSection";
 import { useToast } from "@/hooks/use-toast";
 import { calculateTotal, getPriceBreakdown } from "@/lib/pricing";
 import { initiatePayment } from "@/lib/razorpay";
+import { logRegistration } from "@/lib/sheets";
 
 const RAZORPAY_KEY_ID = "REPLACE_WITH_YOUR_KEY"; // TODO: Replace with your Razorpay Key ID
 
@@ -68,13 +69,22 @@ const Register = () => {
         phone,
         description: `The Spring Edit — ${selected.length} workshop${selected.length > 1 ? "s" : ""}`,
         keyId: RAZORPAY_KEY_ID,
-        onSuccess: (response) => {
+        onSuccess: async (response) => {
+          const workshopNames = selected.map((id) => workshops.find((w) => w.id === id)?.name).filter(Boolean) as string[];
+          await logRegistration({
+            name,
+            email,
+            phone,
+            workshops: workshopNames,
+            total,
+            paymentId: response.razorpay_payment_id,
+          });
           setPaying(false);
           navigate("/confirmation", {
             state: {
               name,
               email,
-              workshops: selected.map((id) => workshops.find((w) => w.id === id)?.name),
+              workshops: workshopNames,
               paymentId: response.razorpay_payment_id,
               total,
             },
@@ -266,8 +276,8 @@ const Register = () => {
                   </div>
                 </div>
 
-                <p className="text-xs text-muted-foreground text-center mt-4">
-                  Additional workshops can be booked on the spot (₹300 each, subject to availability)
+                <p className="text-xs text-muted-foreground text-center mt-4 italic">
+                  Note: Additional workshops can be booked on the spot at Rs.300 each, subject to availability.
                 </p>
               </motion.div>
             )}

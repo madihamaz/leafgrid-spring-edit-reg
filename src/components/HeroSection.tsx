@@ -27,10 +27,9 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
+          className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
         >
-          The Spring
-          <span className="block text-gradient-leaf italic">Edit</span>
+          The Spring <span className="text-gradient-leaf italic">Edit</span>
         </motion.h1>
 
         <motion.p
