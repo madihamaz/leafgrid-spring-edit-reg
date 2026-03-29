@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Leaf } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import leafgridLogo from "@/assets/leafgrid-logo.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -19,7 +20,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2">
-          <Leaf className="w-6 h-6 text-primary" />
+          <img src={leafgridLogo} alt="LeafGrid" className="w-8 h-8" />
           <span className="font-display text-lg font-semibold text-foreground">LeafGrid</span>
         </Link>
 
