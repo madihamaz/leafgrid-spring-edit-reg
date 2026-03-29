@@ -1,4 +1,5 @@
-import { Leaf, Instagram, Phone, MapPin } from "lucide-react";
+import { Instagram, Phone, MapPin } from "lucide-react";
+import leafgridLogo from "@/assets/leafgrid-logo.png";
 
 const Footer = () => (
   <footer className="py-12 border-t border-border">
@@ -7,7 +8,7 @@ const Footer = () => (
         {/* Brand */}
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <Leaf className="w-5 h-5 text-primary" />
+            <img src={leafgridLogo} alt="LeafGrid" className="w-7 h-7" />
             <span className="font-display text-lg font-semibold">LeafGrid</span>
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">

@@ -176,7 +176,7 @@ const Register = () => {
                     Select workshops you'd like to attend — <span className="text-primary font-medium">{selected.length} selected</span>
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    ₹300 per workshop · ₹350 each for 3 or more
+                    ₹399 per workshop (inclusive of entry)
                   </p>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -277,7 +277,7 @@ const Register = () => {
                 </div>
 
                 <p className="text-xs text-muted-foreground text-center mt-4 italic">
-                  Note: Additional workshops can be booked on the spot at Rs.300 each, subject to availability.
+                  Note: Additional workshops can be booked on the spot at ₹399 each, subject to availability.
                 </p>
               </motion.div>
             )}
