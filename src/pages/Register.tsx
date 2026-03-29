@@ -10,7 +10,7 @@ import { calculateTotal, getPriceBreakdown } from "@/lib/pricing";
 import { initiatePayment } from "@/lib/razorpay";
 import { logRegistration } from "@/lib/sheets";
 
-const RAZORPAY_KEY_ID = "REPLACE_WITH_YOUR_KEY"; // TODO: Replace with your Razorpay Key ID
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined;
 
 const steps = [
   { label: "Your Details", icon: User },
@@ -55,8 +55,8 @@ const Register = () => {
   };
 
   const handlePayment = async () => {
-    if (RAZORPAY_KEY_ID === "REPLACE_WITH_YOUR_KEY") {
-      toast({ title: "Razorpay Key ID not configured", description: "Please add your Razorpay Key ID to complete payment integration.", variant: "destructive" });
+    if (!RAZORPAY_KEY_ID) {
+      toast({ title: "Payment gateway not configured", description: "Please set the VITE_RAZORPAY_KEY_ID environment variable.", variant: "destructive" });
       return;
     }
 
