@@ -28,7 +28,7 @@ const Footer = () => (
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <Instagram className="w-4 h-4" />
-                @leafgrid.in
+                @thespring.edit
               </a>
             </li>
             <li>
