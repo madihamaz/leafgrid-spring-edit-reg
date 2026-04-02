@@ -7,9 +7,8 @@ const Footer = () => (
       <div className="grid sm:grid-cols-3 gap-8 mb-8">
         {/* Brand */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <img src={leafgridLogo} alt="LeafGrid" className="w-7 h-7" />
-            <span className="font-display text-lg font-semibold">LeafGrid</span>
+          <div className="flex items-center mb-3">
+            <img src={leafgridLogo} alt="LeafGrid" className="w-14 h-14" />
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">
             Bringing people closer to nature through creativity. One workshop at a time.
@@ -22,22 +21,22 @@ const Footer = () => (
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               <a
-                href="https://www.instagram.com/leafgrid.in"
+                href="https://www.instagram.com/thespring.edit/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <Instagram className="w-4 h-4" />
-                @leafgrid.in
+                @thespring.edit
               </a>
             </li>
             <li>
               <a
-                href="tel:+919876543210"
+                href="tel:+918367648316"
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                +91 98765 43210
+                +91 83676 48316
               </a>
             </li>
             <li className="inline-flex items-center gap-2">
