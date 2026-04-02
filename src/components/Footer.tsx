@@ -22,22 +22,22 @@ const Footer = () => (
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               <a
-                href="https://www.instagram.com/leafgrid.in"
+                href="https://www.instagram.com/thespring.edit/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <Instagram className="w-4 h-4" />
-                @leafgrid.in
+                @thespring.edit
               </a>
             </li>
             <li>
               <a
-                href="tel:+919876543210"
+                href="tel:+918367648316"
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                +91 98765 43210
+                +91 83676 48316
               </a>
             </li>
             <li className="inline-flex items-center gap-2">
