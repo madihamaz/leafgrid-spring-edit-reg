@@ -7,9 +7,8 @@ const Footer = () => (
       <div className="grid sm:grid-cols-3 gap-8 mb-8">
         {/* Brand */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <img src={leafgridLogo} alt="LeafGrid" className="w-7 h-7" />
-            <span className="font-display text-lg font-semibold">LeafGrid</span>
+          <div className="flex items-center mb-3">
+            <img src={leafgridLogo} alt="LeafGrid" className="w-14 h-14" />
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">
             Bringing people closer to nature through creativity. One workshop at a time.
