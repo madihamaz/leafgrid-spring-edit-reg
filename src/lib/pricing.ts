@@ -1,8 +1,8 @@
-export const WORKSHOP_PRICE = 399;
+export const TICKET_PRICE = 1200;
+export const MIN_WORKSHOPS = 3;
 
-export function calculateTotal(workshopCount: number): number {
-  if (workshopCount <= 0) return 0;
-  return workshopCount * WORKSHOP_PRICE;
+export function calculateTotal(_workshopCount: number): number {
+  return TICKET_PRICE;
 }
 
 export function getPriceBreakdown(workshopCount: number) {
@@ -10,10 +10,10 @@ export function getPriceBreakdown(workshopCount: number) {
 
   if (workshopCount > 0) {
     items.push({
-      label: `${workshopCount} Workshop${workshopCount > 1 ? "s" : ""} × ₹${WORKSHOP_PRICE}`,
-      amount: workshopCount * WORKSHOP_PRICE,
+      label: `Entry Ticket (${workshopCount} Workshop${workshopCount > 1 ? "s" : ""})`,
+      amount: TICKET_PRICE,
     });
   }
 
-  return { items, total: calculateTotal(workshopCount) };
+  return { items, total: TICKET_PRICE };
 }
