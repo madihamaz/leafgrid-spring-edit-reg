@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { workshops } from "@/components/WorkshopsSection";
 import { useToast } from "@/hooks/use-toast";
-import { calculateTotal, getPriceBreakdown } from "@/lib/pricing";
+import { calculateTotal, getPriceBreakdown, MIN_WORKSHOPS } from "@/lib/pricing";
 import { initiatePayment } from "@/lib/razorpay";
 import { logRegistration } from "@/lib/sheets";
 
@@ -39,14 +39,14 @@ const Register = () => {
 
   const canProceed = () => {
     if (step === 0) return name.trim() && email.trim() && phone.trim();
-    if (step === 1) return selected.length >= 1;
+    if (step === 1) return selected.length >= MIN_WORKSHOPS;
     return true;
   };
 
   const handleNext = () => {
     if (!canProceed()) {
       toast({
-        title: step === 1 ? "Please select at least 1 workshop" : "Please fill all fields",
+        title: step === 1 ? `Please select at least ${MIN_WORKSHOPS} workshops` : "Please fill all fields",
         variant: "destructive",
       });
       return;
@@ -173,10 +173,10 @@ const Register = () => {
                 <div className="text-center mb-8">
                   <h1 className="font-display text-3xl font-bold mb-2">Choose Your Workshops</h1>
                   <p className="text-muted-foreground">
-                    Select workshops you'd like to attend — <span className="text-primary font-medium">{selected.length} selected</span>
+                    Select at least {MIN_WORKSHOPS} workshops — <span className="text-primary font-medium">{selected.length} selected</span>
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    ₹399 per workshop (inclusive of entry)
+                    ₹1200 per person (includes all selected workshops)
                   </p>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -277,7 +277,7 @@ const Register = () => {
                 </div>
 
                 <p className="text-xs text-muted-foreground text-center mt-4 italic">
-                  Note: Additional workshops can be booked on the spot at ₹399 each, subject to availability.
+                  Note: Additional workshops can be booked on the spot, subject to availability.
                 </p>
               </motion.div>
             )}
