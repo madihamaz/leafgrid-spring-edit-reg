@@ -49,12 +49,12 @@ const HeroSection = () => {
         >
           <span className="flex items-center gap-2">
             <CalendarDays className="w-4 h-4 text-primary" />
-            Coming Soon
+            14 May 2026
           </span>
           <span className="hidden sm:block text-border">•</span>
           <span className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary" />
-            Lamakaan, Hyderabad
+            Imli Sarai, Hyderabad
           </span>
         </motion.div>
 

@@ -39,9 +39,16 @@ const Footer = () => (
                 +91 83676 48316
               </a>
             </li>
-            <li className="inline-flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
-              Hyderabad, India
+            <li>
+              <a
+                href="https://maps.google.com/?q=Imli+Sarai+Hyderabad"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 hover:text-primary transition-colors"
+              >
+                <MapPin className="w-4 h-4" />
+                Imli Sarai, Hyderabad
+              </a>
             </li>
           </ul>
         </div>
