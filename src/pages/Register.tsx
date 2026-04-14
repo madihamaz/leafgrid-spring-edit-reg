@@ -30,7 +30,11 @@ const Register = () => {
 
   const toggleWorkshop = (id: string) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+      prev.includes(id)
+        ? prev.filter((s) => s !== id)
+        : prev.length < 3
+          ? [...prev, id]
+          : prev
     );
   };
 
@@ -39,14 +43,14 @@ const Register = () => {
 
   const canProceed = () => {
     if (step === 0) return name.trim() && email.trim() && phone.trim();
-    if (step === 1) return selected.length >= MIN_WORKSHOPS;
+    if (step === 1) return selected.length === MIN_WORKSHOPS;
     return true;
   };
 
   const handleNext = () => {
     if (!canProceed()) {
       toast({
-        title: step === 1 ? `Please select at least ${MIN_WORKSHOPS} workshops` : "Please fill all fields",
+        title: step === 1 ? `Please select exactly ${MIN_WORKSHOPS} workshops` : "Please fill all fields",
         variant: "destructive",
       });
       return;
@@ -175,8 +179,8 @@ const Register = () => {
                   <p className="text-muted-foreground">
                     Select workshops you'd like to attend — <span className="text-primary font-medium">{selected.length} selected</span>
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Select a minimum of {MIN_WORKSHOPS} workshops — ₹1200 per ticket
+                   <p className="text-xs text-muted-foreground mt-1">
+                     Select {MIN_WORKSHOPS} workshops — ₹1,200 per ticket
                   </p>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
