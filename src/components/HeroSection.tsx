@@ -54,7 +54,7 @@ const HeroSection = () => {
           <span className="hidden sm:block text-border">•</span>
           <span className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary" />
-            Lamakaan, Hyderabad
+            Imli Sarai, Hyderabad
           </span>
         </motion.div>
 
