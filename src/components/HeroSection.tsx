@@ -2,12 +2,24 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CalendarDays, MapPin } from "lucide-react";
 import springEditLogo from "@/assets/spring-edit-logo.png.asset.json";
+import heroVideo from "@/assets/spring-edit-hero.mp4.asset.json";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/95" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+      >
+        <source src={heroVideo.url} type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-background/70" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
 
       <div className="relative container text-center py-32 px-4">
         <motion.p
@@ -28,7 +40,7 @@ const HeroSection = () => {
           <img
             src={springEditLogo.url}
             alt="The Spring Edit 2.0 by LeafGrid"
-            className="w-[280px] sm:w-[360px] md:w-[480px] lg:w-[560px] h-auto"
+            className="h-auto w-[220px] sm:w-[270px] md:w-[320px] lg:w-[380px]"
           />
         </motion.div>
 
