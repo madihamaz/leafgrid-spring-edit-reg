@@ -1,36 +1,36 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CalendarDays, MapPin } from "lucide-react";
-import heroBg from "@/assets/hero-bg.jpg";
+import springEditLogo from "@/assets/spring-edit-logo.png.asset.json";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0">
-        <img src={heroBg} alt="Creative workshop setup" className="w-full h-full object-cover" width={1920} height={1080} />
-        <div className="absolute inset-0 bg-background/75" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/95" />
 
       <div className="relative container text-center py-32 px-4">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-primary font-body text-sm tracking-[0.3em] uppercase mb-6"
+          className="text-primary font-body text-sm tracking-[0.3em] uppercase mb-8"
         >
           A LeafGrid Experience
         </motion.p>
 
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+          className="flex justify-center mb-8"
         >
-          The Spring <span className="text-gradient-leaf italic">Edit</span>
-        </motion.h1>
+          <img
+            src={springEditLogo.url}
+            alt="The Spring Edit 2.0 by LeafGrid"
+            className="w-[280px] sm:w-[360px] md:w-[480px] lg:w-[560px] h-auto"
+          />
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
