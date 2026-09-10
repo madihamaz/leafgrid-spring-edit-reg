@@ -88,6 +88,10 @@
     box-shadow: 0 0 40px -10px hsl(var(--leaf) / 0.3);
   }
 
+  .text-glow-leaf {
+    text-shadow: 0 0 12px hsl(var(--leaf) / 0.6), 0 0 28px hsl(var(--leaf) / 0.35);
+  }
+
   .border-glow {
     border-color: hsl(var(--leaf) / 0.2);
   }
