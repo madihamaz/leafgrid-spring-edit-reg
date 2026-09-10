@@ -30,7 +30,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-primary font-body text-sm tracking-[0.3em] uppercase mb-8"
+            className="text-primary font-body text-sm sm:text-base tracking-[0.3em] uppercase mb-8"
           >
             A LeafGrid Experience
           </motion.p>
@@ -44,7 +44,7 @@ const HeroSection = () => {
             <img
               src={springEditLogo}
               alt="The Spring Edit 2.0 by LeafGrid"
-              className="h-auto w-[220px] sm:w-[270px] md:w-[320px] lg:w-[380px]"
+              className="h-auto w-[260px] sm:w-[340px] md:w-[420px] lg:w-[480px] xl:w-[520px]"
             />
           </motion.div>
 
@@ -52,7 +52,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="text-muted-foreground text-lg md:text-xl max-w-xl mx-auto font-light"
+            className="text-muted-foreground text-lg md:text-2xl max-w-xl mx-auto font-light"
           >
             Bringing people closer to nature through creativity
           </motion.p>
@@ -63,16 +63,16 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-muted-foreground"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 text-base md:text-lg text-muted-foreground"
           >
             <span className="flex items-center gap-2">
-              <CalendarDays className="w-4 h-4 text-primary" />
-              14 May 2026
+              <CalendarDays className="w-5 h-5 text-primary" />
+              9–11 October 2026
             </span>
             <span className="hidden sm:block text-border">•</span>
             <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-primary" />
-              Imli Sarai, Hyderabad
+              <MapPin className="w-5 h-5 text-primary" />
+              Grand Food Fest, Gachibowli Stadium, Hyderabad
             </span>
           </motion.div>
 
@@ -83,7 +83,7 @@ const HeroSection = () => {
           >
             <Link
               to="/register"
-              className="inline-block px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg hover:opacity-90 transition-all animate-pulse-glow"
+              className="inline-block px-10 py-5 rounded-full bg-primary text-primary-foreground font-medium text-lg md:text-xl hover:opacity-90 transition-all animate-pulse-glow"
             >
               Grab Your Spot
             </Link>

@@ -46,11 +46,11 @@ const Confirmation = () => {
               <p className="font-display font-semibold text-lg">Event Details</p>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
-                <span>Lamakaan, Hyderabad</span>
+                <span>Grand Food Fest, Gachibowli Stadium, Hyderabad</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <CalendarDays className="w-4 h-4 text-primary flex-shrink-0" />
-                <span>Date to be announced</span>
+                <span>9–11 October 2026</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Clock className="w-4 h-4 text-primary flex-shrink-0" />

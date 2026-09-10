@@ -41,13 +41,13 @@ const Footer = () => (
             </li>
             <li>
               <a
-                href="https://maps.google.com/?q=Imli+Sarai+Hyderabad"
+                href="https://maps.google.com/?q=Gachibowli+Stadium+Hyderabad"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <MapPin className="w-4 h-4" />
-                Imli Sarai, Hyderabad
+                Grand Food Fest, Gachibowli Stadium, Hyderabad
               </a>
             </li>
           </ul>
