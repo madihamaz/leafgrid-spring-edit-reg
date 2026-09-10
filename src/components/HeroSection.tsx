@@ -14,34 +14,29 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
       </div>
 
-      <motion.img
-        src={springEditLogo}
-        alt="The Spring Edit 2.0"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3 }}
-        className="hidden md:block absolute top-8 lg:top-10 right-4 lg:right-12 w-28 lg:w-40 xl:w-48 opacity-90 pointer-events-none select-none"
-      />
-
       <div className="relative container flex flex-col items-center justify-between text-center px-4 min-h-[70vh] md:min-h-[80vh] py-16">
         <div className="flex flex-col items-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-primary font-body text-sm tracking-[0.3em] uppercase mb-6"
+            className="text-primary font-body text-sm tracking-[0.3em] uppercase mb-8"
           >
             A LeafGrid Experience
           </motion.p>
 
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+            className="flex justify-center mb-8"
           >
-            The Spring <span className="text-gradient-leaf italic">Edit</span>
-          </motion.h1>
+            <img
+              src={springEditLogo}
+              alt="The Spring Edit 2.0 by LeafGrid"
+              className="h-auto w-[220px] sm:w-[270px] md:w-[320px] lg:w-[380px]"
+            />
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
