@@ -1,12 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, ArrowLeft, User, Palette, CreditCard } from "lucide-react";
+import { Check, ArrowRight, ArrowLeft, User, Ticket, Palette, CreditCard } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { workshops } from "@/components/WorkshopsSection";
 import { useToast } from "@/hooks/use-toast";
-import { calculateTotal, getPriceBreakdown, MIN_WORKSHOPS } from "@/lib/pricing";
+import {
+  calculateTotal,
+  getPriceBreakdown,
+  getWorkshopAllowance,
+  DISCOUNT_PCT,
+  PASSES,
+  QUANTITIES,
+  type PassType,
+  type Quantity,
+} from "@/lib/pricing";
 import { initiatePayment } from "@/lib/razorpay";
 import { logRegistration } from "@/lib/sheets";
 
@@ -14,6 +23,7 @@ const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefin
 
 const steps = [
   { label: "Your Details", icon: User },
+  { label: "Pick a Pass", icon: Ticket },
   { label: "Pick Workshops", icon: Palette },
   { label: "Summary", icon: CreditCard },
 ];
@@ -23,39 +33,50 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [pass, setPass] = useState<PassType | null>(null);
+  const [quantity, setQuantity] = useState<Quantity>(1);
   const [selected, setSelected] = useState<string[]>([]);
   const [paying, setPaying] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const allowance = pass ? getWorkshopAllowance(pass) : 0;
+  const total = pass ? calculateTotal(pass, quantity) : 0;
+  const breakdown = pass ? getPriceBreakdown(pass, quantity) : null;
+
+  const choosePass = (next: PassType) => {
+    setPass(next);
+    setSelected((prev) => prev.slice(0, getWorkshopAllowance(next)));
+  };
+
   const toggleWorkshop = (id: string) => {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((s) => s !== id)
-        : prev.length < 3
+        : prev.length < allowance
           ? [...prev, id]
           : prev
     );
   };
 
-  const total = calculateTotal(selected.length);
-  const { items: priceItems } = getPriceBreakdown(selected.length);
-
   const canProceed = () => {
     if (step === 0) return name.trim() && email.trim() && phone.trim();
-    if (step === 1) return selected.length === MIN_WORKSHOPS;
+    if (step === 1) return pass !== null;
+    if (step === 2) return selected.length === allowance;
     return true;
   };
 
   const handleNext = () => {
     if (!canProceed()) {
-      toast({
-        title: step === 1 ? `Please select exactly ${MIN_WORKSHOPS} workshops` : "Please fill all fields",
-        variant: "destructive",
-      });
+      const messages = [
+        "Please fill all fields",
+        "Please choose a pass",
+        `Please select ${allowance} workshop${allowance > 1 ? "s" : ""}`,
+      ];
+      toast({ title: messages[step], variant: "destructive" });
       return;
     }
-    if (step < 2) setStep(step + 1);
+    if (step < 3) setStep(step + 1);
   };
 
   const handlePayment = async () => {
@@ -63,6 +84,7 @@ const Register = () => {
       toast({ title: "Payment gateway not configured", description: "Please set the VITE_RAZORPAY_KEY_ID environment variable.", variant: "destructive" });
       return;
     }
+    if (!pass) return;
 
     setPaying(true);
     try {
@@ -71,7 +93,7 @@ const Register = () => {
         name,
         email,
         phone,
-        description: `The Spring Edit — ${selected.length} workshop${selected.length > 1 ? "s" : ""}`,
+        description: `The Spring Edit — ${PASSES[pass].label} × ${quantity}`,
         keyId: RAZORPAY_KEY_ID,
         onSuccess: async (response) => {
           const workshopNames = selected.map((id) => workshops.find((w) => w.id === id)?.name).filter(Boolean) as string[];
@@ -79,6 +101,8 @@ const Register = () => {
             name,
             email,
             phone,
+            passType: pass,
+            quantity,
             workshops: workshopNames,
             total,
             paymentId: response.razorpay_payment_id,
@@ -88,6 +112,8 @@ const Register = () => {
             state: {
               name,
               email,
+              passType: pass,
+              quantity,
               workshops: workshopNames,
               paymentId: response.razorpay_payment_id,
               total,
@@ -129,7 +155,7 @@ const Register = () => {
                   {s.label}
                 </span>
                 {i < steps.length - 1 && (
-                  <div className={`w-8 h-px mx-1 ${i < step ? "bg-primary" : "bg-border"}`} />
+                  <div className={`w-6 h-px mx-1 ${i < step ? "bg-primary" : "bg-border"}`} />
                 )}
               </div>
             ))}
@@ -175,13 +201,94 @@ const Register = () => {
                 exit={{ opacity: 0, x: -30 }}
               >
                 <div className="text-center mb-8">
+                  <h1 className="font-display text-3xl font-bold mb-2">Pick Your Pass</h1>
+                  <p className="text-muted-foreground">Both passes include entry to the Grand Food Fest.</p>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {(Object.keys(PASSES) as PassType[]).map((key) => {
+                    const p = PASSES[key];
+                    const isSelected = pass === key;
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => choosePass(key)}
+                        className={`text-left rounded-2xl border p-5 transition-all duration-300 ${
+                          isSelected ? "border-primary glow-leaf bg-card" : "border-border bg-card hover:border-glow"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-display font-semibold text-lg">{p.label}</h3>
+                          {isSelected && <Check className="w-5 h-5 text-primary-foreground bg-primary rounded-full p-1" />}
+                        </div>
+                        <p className="font-display text-2xl font-bold text-primary mb-2">
+                          ₹{p.perPerson}
+                          <span className="text-sm font-body font-normal text-muted-foreground"> / person</span>
+                        </p>
+                        <p className="text-muted-foreground text-sm">{p.includes}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {pass && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
+                    <p className="text-sm text-foreground mb-3">How many people?</p>
+                    <div className="grid grid-cols-5 gap-2">
+                      {QUANTITIES.map((q) => {
+                        const isSelected = quantity === q;
+                        return (
+                          <button
+                            key={q}
+                            onClick={() => setQuantity(q)}
+                            className={`rounded-xl border py-3 transition-all ${
+                              isSelected ? "border-primary bg-primary/10" : "border-border bg-card hover:border-glow"
+                            }`}
+                          >
+                            <span className={`block font-display font-semibold ${isSelected ? "text-primary" : "text-foreground"}`}>
+                              {q}
+                            </span>
+                            <span className="block text-[11px] text-muted-foreground mt-0.5">
+                              {DISCOUNT_PCT[q] > 0 ? `${DISCOUNT_PCT[q]}% off` : "—"}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {breakdown && (
+                      <div className="mt-6 p-4 rounded-xl bg-card border border-border text-center">
+                        <span className="text-muted-foreground text-sm">Total: </span>
+                        <span className="font-display text-2xl font-bold text-primary">₹{breakdown.total.toLocaleString("en-IN")}</span>
+                        {breakdown.savings > 0 && (
+                          <span className="block text-xs text-primary mt-1">
+                            You save ₹{breakdown.savings.toLocaleString("en-IN")}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+              >
+                <div className="text-center mb-8">
                   <h1 className="font-display text-3xl font-bold mb-2">Choose Your Workshops</h1>
                   <p className="text-muted-foreground">
-                    Select workshops you'd like to attend — <span className="text-primary font-medium">{selected.length} selected</span>
+                    Pick {allowance} — <span className="text-primary font-medium">{selected.length} of {allowance} selected</span>
                   </p>
-                   <p className="text-xs text-muted-foreground mt-1">
-                     Select {MIN_WORKSHOPS} workshops — ₹1,200 per ticket
-                  </p>
+                  {quantity > 1 && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      We'll collect the other {quantity - 1} attendees' details and workshop choices after payment.
+                    </p>
+                  )}
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {workshops.map((w) => {
@@ -212,24 +319,12 @@ const Register = () => {
                     );
                   })}
                 </div>
-
-                {/* Live price preview */}
-                {selected.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 p-4 rounded-xl bg-card border border-border text-center"
-                  >
-                    <span className="text-muted-foreground text-sm">Estimated total: </span>
-                    <span className="font-display text-xl font-bold text-primary">₹{total}</span>
-                  </motion.div>
-                )}
               </motion.div>
             )}
 
-            {step === 2 && (
+            {step === 3 && (
               <motion.div
-                key="step2"
+                key="step3"
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
@@ -254,6 +349,13 @@ const Register = () => {
                   </div>
                   <hr className="border-border" />
                   <div>
+                    <p className="text-sm text-muted-foreground">Pass</p>
+                    <p className="text-foreground font-medium">
+                      {pass && PASSES[pass].label} — {quantity} {quantity > 1 ? "people" : "person"}
+                    </p>
+                  </div>
+                  <hr className="border-border" />
+                  <div>
                     <p className="text-sm text-muted-foreground mb-3">Selected Workshops</p>
                     <div className="space-y-3">
                       {selectedWorkshops.map((w) => (
@@ -266,18 +368,24 @@ const Register = () => {
                   </div>
                   <hr className="border-border" />
                   {/* Price breakdown */}
-                  <div className="space-y-2">
-                    {priceItems.map((item) => (
-                      <div key={item.label} className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">{item.label}</span>
-                        <span className="text-foreground">₹{item.amount}</span>
+                  {breakdown && (
+                    <div className="space-y-2">
+                      {breakdown.items.map((item) => (
+                        <div key={item.label} className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">{item.label}</span>
+                          <span className={item.amount < 0 ? "text-primary" : "text-foreground"}>
+                            {item.amount < 0 ? "−" : ""}₹{Math.abs(item.amount).toLocaleString("en-IN")}
+                          </span>
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between pt-2 border-t border-border">
+                        <span className="font-medium text-foreground">Total</span>
+                        <span className="font-display text-2xl font-bold text-primary">
+                          ₹{breakdown.total.toLocaleString("en-IN")}
+                        </span>
                       </div>
-                    ))}
-                    <div className="flex items-center justify-between pt-2 border-t border-border">
-                      <span className="font-medium text-foreground">Total</span>
-                      <span className="font-display text-2xl font-bold text-primary">₹{total}</span>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <p className="text-xs text-muted-foreground text-center mt-4 italic">
@@ -301,7 +409,7 @@ const Register = () => {
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
 
-            {step < 2 ? (
+            {step < 3 ? (
               <button
                 onClick={handleNext}
                 className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
@@ -314,7 +422,7 @@ const Register = () => {
                 disabled={paying}
                 className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity animate-pulse-glow disabled:opacity-50"
               >
-                {paying ? "Processing…" : `Pay ₹${total}`} <ArrowRight className="w-4 h-4" />
+                {paying ? "Processing…" : `Pay ₹${total.toLocaleString("en-IN")}`} <ArrowRight className="w-4 h-4" />
               </button>
             )}
           </div>

@@ -4,6 +4,8 @@ interface RegistrationData {
   name: string;
   email: string;
   phone: string;
+  passType: "regular" | "premium";
+  quantity: number;
   workshops: string[];
   total: number;
   paymentId: string;
