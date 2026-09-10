@@ -5,15 +5,15 @@ import WorkshopsSection from "@/components/WorkshopsSection";
 import CommunitySection from "@/components/CommunitySection";
 import Footer from "@/components/Footer";
 
-const Index = () => (
-  <div className="min-h-screen">
-    <Navbar />
-    <HeroSection />
-    <AboutSection />
-    <WorkshopsSection />
-    <CommunitySection />
-    <Footer />
-  </div>
-);
-
-export default Index;
+export default function Home() {
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      <HeroSection />
+      <AboutSection />
+      <WorkshopsSection />
+      <CommunitySection />
+      <Footer />
+    </div>
+  );
+}

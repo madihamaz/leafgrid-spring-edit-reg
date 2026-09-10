@@ -8,7 +8,7 @@ const Footer = () => (
         {/* Brand */}
         <div>
           <div className="flex items-center mb-3">
-            <img src={leafgridLogo} alt="LeafGrid" className="w-14 h-14" />
+            <img src={leafgridLogo.src} alt="LeafGrid" className="w-14 h-14" />
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">
             Bringing people closer to nature through creativity. One workshop at a time.

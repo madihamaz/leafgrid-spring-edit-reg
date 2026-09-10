@@ -1,6 +1,8 @@
+"use client";
+
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import workshopPottery from "@/assets/workshop-pottery.jpg";
 import workshopBouquet from "@/assets/workshop-bouquet.jpg";
 import workshopTerrarium from "@/assets/workshop-terrarium.jpg";
@@ -11,31 +13,31 @@ export const workshops = [
   {
     id: "pottery",
     name: "Pottery Making",
-    image: workshopPottery,
+    image: workshopPottery.src,
     description: "Shape clay on the wheel and discover the meditative art of pottery. Take home your own handmade piece.",
   },
   {
     id: "bouquet",
     name: "Bouquet Making",
-    image: workshopBouquet,
+    image: workshopBouquet.src,
     description: "Arrange seasonal blooms into a stunning bouquet. Learn the art of floral design with fresh flowers.",
   },
   {
     id: "terrarium",
     name: "Terrarium Building",
-    image: workshopTerrarium,
+    image: workshopTerrarium.src,
     description: "Layer soil, moss, and succulents inside glass to create your own miniature ecosystem.",
   },
   {
     id: "pot-painting",
     name: "Pot Painting",
-    image: workshopPotPainting,
+    image: workshopPotPainting.src,
     description: "Paint botanical designs on terracotta pots. No experience needed — just your imagination.",
   },
   {
     id: "glass-painting",
     name: "Glass Painting",
-    image: workshopGlass,
+    image: workshopGlass.src,
     description: "Create translucent art on glass with vibrant colors inspired by nature and stained glass traditions.",
   },
 ];
@@ -101,7 +103,7 @@ const WorkshopsSection = () => {
           className="text-center mt-12"
         >
           <Link
-            to="/register"
+            href="/register"
             className="inline-block px-8 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
           >
             Register & Choose Your Workshops

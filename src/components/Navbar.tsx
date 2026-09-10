@@ -1,12 +1,13 @@
+"use client";
+
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import leafgridLogo from "@/assets/leafgrid-logo.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
 
   const links = [
     { label: "Home", href: "/" },
@@ -14,13 +15,11 @@ const Navbar = () => {
     { label: "About", href: "/#about" },
   ];
 
-  const isHome = location.pathname === "/";
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container flex items-center justify-between h-16">
-        <Link to="/" className="flex items-center">
-          <img src={leafgridLogo} alt="LeafGrid" className="w-12 h-12" />
+        <Link href="/" className="flex items-center">
+          <img src={leafgridLogo.src} alt="LeafGrid" className="w-12 h-12" />
         </Link>
 
         {/* Desktop */}
@@ -35,7 +34,7 @@ const Navbar = () => {
             </a>
           ))}
           <Link
-            to="/register"
+            href="/register"
             className="px-5 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
           >
             Register Now
@@ -68,7 +67,7 @@ const Navbar = () => {
                 </a>
               ))}
               <Link
-                to="/register"
+                href="/register"
                 onClick={() => setOpen(false)}
                 className="px-5 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium text-center"
               >

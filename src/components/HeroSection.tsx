@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { CalendarDays, MapPin } from "lucide-react";
-import heroVideo from "@/assets/spring-edit-hero.mp4";
 import springEditLogo from "@/assets/spring-edit-logo.png";
 
 const HeroSection = () => {
@@ -18,7 +19,7 @@ const HeroSection = () => {
           preload="metadata"
           aria-hidden="true"
         >
-          <source src={heroVideo} type="video/mp4" />
+          <source src="/spring-edit-hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-background/75" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
@@ -41,7 +42,7 @@ const HeroSection = () => {
           className="flex justify-center mb-6 md:mb-8"
         >
           <img
-            src={springEditLogo}
+            src={springEditLogo.src}
             alt="The Spring Edit 2.0 by LeafGrid"
             className="h-auto w-[240px] sm:w-[310px] md:w-[385px] lg:w-[440px] xl:w-[475px]"
           />
@@ -79,7 +80,7 @@ const HeroSection = () => {
           transition={{ delay: 1 }}
         >
           <Link
-            to="/register"
+            href="/register"
             className="inline-block px-10 py-5 rounded-full bg-primary text-primary-foreground font-medium text-lg md:text-xl hover:opacity-90 transition-all animate-pulse-glow"
           >
             Grab Your Spot

@@ -1,6 +1,8 @@
+"use client";
+
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Heart, Clock, Sparkles } from "lucide-react";
 
 const CommunitySection = () => {
@@ -76,7 +78,7 @@ const CommunitySection = () => {
                 Once they're gone, they're gone. Secure your place now.
               </p>
               <Link
-                to="/register"
+                href="/register"
                 className="inline-block mt-4 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
               >
                 Grab Your Spot

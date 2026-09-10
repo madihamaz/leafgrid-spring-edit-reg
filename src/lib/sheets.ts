@@ -1,4 +1,4 @@
-const APPSCRIPT_URL = import.meta.env.VITE_APPSCRIPT_URL as string | undefined;
+const APPSCRIPT_URL = process.env.NEXT_PUBLIC_APPSCRIPT_URL;
 
 interface RegistrationData {
   name: string;

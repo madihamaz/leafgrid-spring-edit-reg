@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, User, Ticket, Palette, CreditCard } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -18,8 +20,9 @@ import {
 } from "@/lib/pricing";
 import { initiatePayment } from "@/lib/razorpay";
 import { logRegistration } from "@/lib/sheets";
+import { storeConfirmation } from "@/lib/confirmation";
 
-const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined;
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
 const steps = [
   { label: "Your Details", icon: User },
@@ -28,7 +31,7 @@ const steps = [
   { label: "Summary", icon: CreditCard },
 ];
 
-const Register = () => {
+export default function Register() {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -37,7 +40,7 @@ const Register = () => {
   const [quantity, setQuantity] = useState<Quantity>(1);
   const [selected, setSelected] = useState<string[]>([]);
   const [paying, setPaying] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { toast } = useToast();
 
   const allowance = pass ? getWorkshopAllowance(pass) : 0;
@@ -108,17 +111,16 @@ const Register = () => {
             paymentId: response.razorpay_payment_id,
           });
           setPaying(false);
-          navigate("/confirmation", {
-            state: {
-              name,
-              email,
-              passType: pass,
-              quantity,
-              workshops: workshopNames,
-              paymentId: response.razorpay_payment_id,
-              total,
-            },
+          storeConfirmation({
+            name,
+            email,
+            passType: pass,
+            quantity,
+            workshops: workshopNames,
+            paymentId: response.razorpay_payment_id,
+            total,
           });
+          router.push("/confirmation");
         },
         onFailure: () => {
           setPaying(false);
@@ -431,6 +433,4 @@ const Register = () => {
       <Footer />
     </div>
   );
-};
-
-export default Register;
+}
