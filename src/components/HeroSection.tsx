@@ -51,7 +51,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="text-muted-foreground text-lg md:text-2xl max-w-xl mx-auto font-light mb-8 md:mb-10"
+          className="text-muted-foreground text-lg md:text-2xl max-w-xl mx-auto font-light mb-16 md:mb-20"
         >
           Bringing people closer to nature through creativity
         </motion.p>
