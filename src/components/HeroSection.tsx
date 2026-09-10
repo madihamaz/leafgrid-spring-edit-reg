@@ -29,7 +29,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-primary text-glow-leaf font-body text-sm sm:text-base tracking-[0.3em] uppercase mb-2"
+          className="text-primary text-glow-leaf font-body text-sm sm:text-base tracking-[0.3em] uppercase mb-3 md:mb-4"
         >
           A LeafGrid Experience
         </motion.p>
@@ -38,12 +38,12 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="flex justify-center mb-6 -mt-6 sm:-mt-8 md:-mt-10 lg:-mt-12"
+          className="flex justify-center mb-6 md:mb-8"
         >
           <img
             src={springEditLogo}
             alt="The Spring Edit 2.0 by LeafGrid"
-            className="h-auto w-[260px] sm:w-[340px] md:w-[420px] lg:w-[480px] xl:w-[520px]"
+            className="h-auto w-[240px] sm:w-[310px] md:w-[385px] lg:w-[440px] xl:w-[475px]"
           />
         </motion.div>
 
@@ -62,13 +62,13 @@ const HeroSection = () => {
           transition={{ delay: 0.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 text-base md:text-lg text-muted-foreground mb-8 md:mb-10"
         >
-          <span className="flex items-center gap-2">
-            <CalendarDays className="w-5 h-5 text-primary" />
+          <span>
+            <CalendarDays className="inline align-middle w-5 h-5 mr-2 text-primary" />
             9–11 October 2026
           </span>
           <span className="hidden sm:block text-border">•</span>
-          <span className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary" />
+          <span>
+            <MapPin className="inline align-middle w-5 h-5 mr-2 text-primary" />
             Grand Food Fest, Gachibowli Stadium, Hyderabad
           </span>
         </motion.div>
